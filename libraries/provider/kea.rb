@@ -10,39 +10,34 @@ class Chef
 
       def action_deploy
         converge_by("Deploy kea: #{new_resource.name}") do
-          deploy_revision(:deploy)
-        end
-      end
-
-      def action_rollback
-        converge_by("Rollback kea: #{new_resource.name}") do
-          deploy_revision(:rollback)
+          kea_config.run_action(:create)
+          if kea_config.updated_by_last_action?
+            kea_service.run_action(:restart)
+          end
         end
       end
 
       private
 
-      def deploy_revision(action)
-        Chef::Resource::DeployRevision.new(new_resource.name, run_context).tap do |r|
-          template_variables = new_resource.template_variables
+      def config_path
+        new_resource.config_path
+      end
 
-          r.before_migrate ()
-          r.before_restart ()
-          r.before_symlink ()
-          r.symlink_before_migrate ({})
-          r.symlinks ({})
-          r.branch new_resource.git_branch
-          r.create_dirs_before_symlink ([])
-          r.deploy_to new_resource.deploy_path
-          r.keep_releases 2
-          r.migrate false
-          r.purge_before_symlink ([])
-          r.repo new_resource.git_repo
-          r.restart_command do
-            kea_load_configs_from_path(template_variables)
-          end
-          r.rollback_on_error true
-        end.run_action(action)
+      def service_name
+        new_resource.service_name
+      end
+
+      def kea_config
+        @kea_config ||= Chef::Resource::File.new(config_path, run_context).tap do |r|
+          r.content new_resource.config.to_json
+          r.notifies :restart, kea_service
+        end
+      end
+
+      def kea_service
+        @kea_service ||= Chef::Resource::Service.new(service_name, run_context).tap do |r|
+          r.provider Chef::Provider::Service::Systemd
+        end
       end
     end
   end

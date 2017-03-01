@@ -4,12 +4,28 @@ class Chef
       resource_name :kea
 
       default_action :deploy
-      allowed_actions :deploy, :rollback
+      allowed_actions :deploy
 
-      property :deploy_path, String
-      property :git_repo, String
-      property :git_branch, String
-      property :template_variables, Hash
+      property :service_name, String
+      property :config_path, String
+
+      def config(arg = nil)
+        set_or_return(
+          :config,
+          arg,
+          :kind_of => [ Hash ])
+      end
+
+      def provider
+        {
+          'Dhcp4' => Chef::Provider::Kea::Dhcp4Server,
+          'Dhcp6' => Chef::Provider::Kea::Dhcp6Server,
+          'DhcpDdns' => Chef::Provider::Kea::DhcpDdnsServer
+        }.each do |k, v|
+          return v if config.has_key?(k)
+        end
+        Chef::Provider::Kea
+      end
     end
   end
 end
