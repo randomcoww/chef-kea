@@ -1,0 +1,7 @@
+name             'kea'
+maintainer       'YOUR_NAME'
+maintainer_email 'YOUR_EMAIL'
+license          'All rights reserved'
+description      'Installs/Configures kea'
+long_description 'Installs/Configures kea'
+version          '0.1.0'
