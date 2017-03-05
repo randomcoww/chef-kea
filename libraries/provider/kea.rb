@@ -13,6 +13,8 @@ class Chef
           kea_config.run_action(:create)
           if kea_config.updated_by_last_action?
             kea_service.run_action(:restart)
+          else
+            kea_service.run_action(:start)
           end
         end
       end
