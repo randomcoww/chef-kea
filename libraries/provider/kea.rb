@@ -29,7 +29,7 @@ class Chef
 
       def kea_config
         @kea_config ||= Chef::Resource::File.new(config_path, run_context).tap do |r|
-          r.content new_resource.config.to_json
+          r.content JSON.pretty_generate(new_resource.config)
           r.notifies :restart, kea_service
         end
       end
