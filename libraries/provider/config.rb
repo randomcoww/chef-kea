@@ -32,7 +32,8 @@ class ChefKea
       private
 
       def kea_config
-        @kea_config ||= Chef::Resource::File.new(config_path, run_context).tap do |r|
+        @kea_config ||= Chef::Resource::File.new(new_resource.path, run_context).tap do |r|
+          r.path new_resource.path
           r.content new_resource.config
         end
       end
