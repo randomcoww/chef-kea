@@ -3,9 +3,9 @@ class ChefKea
     class Dhcp6Config < ChefKea::Resource::Config
       resource_name :kea_dhcp6_config
 
-      def path
-        KeaDhcp6::CONFIG_PATH
-      end
+      property :path, String, desired_state: false,
+                              default: lazy { KeaDhcp6::CONFIG_PATH }
+
     end
   end
 end

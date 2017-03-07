@@ -9,15 +9,10 @@ class ChefKea
       property :exists, [TrueClass, FalseClass]
       property :config, Hash
       property :content, String, default: lazy { to_conf }
-      property :path, String, desired_state: false,
-                              default: lazy { path }
+      property :path, String
 
       def provider
         ChefKea::Provider::Config
-      end
-
-      def path
-
       end
 
       private

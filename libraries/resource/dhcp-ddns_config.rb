@@ -3,8 +3,9 @@ class ChefKea
     class DhcpDdnsConfig < ChefKea::Resource::Config
       resource_name :kea_dhcp_ddns_config
 
-      def path
-        KeaDhcpDdns::CONFIG_PATH
+      property :path, String, desired_state: false,
+                              default: lazy { KeaDhcpDdns::CONFIG_PATH }
+                              
       end
     end
   end
