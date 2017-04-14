@@ -5,8 +5,7 @@ class ChefKea
 
       property :path, String, desired_state: false,
                               default: lazy { KeaDhcpDdns::CONFIG_PATH }
-                              
-      end
+
     end
   end
 end
