@@ -3,7 +3,6 @@ systemd_unit "kea-dhcp4-server.service" do
   content ({
     'Unit' => {
       'Description' => 'ISC KEA IPv4 DHCP daemon',
-      'Documentation' => 'man:kea-dhcp4(8)',
       'After' => [
         'mysql.service',
         'network-online.target',
