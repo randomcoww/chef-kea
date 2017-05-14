@@ -1,21 +1,14 @@
-## rewrite this to include mysql dependency and restart
-systemd_unit "kea-dhcp4-server.service" do
-  content ({
+systemd_resource_dropin "10-mysql.conf" do
+  service "kea-dhcp4-server.service"
+  config ({
     'Unit' => {
-      'Description' => 'ISC KEA IPv4 DHCP daemon',
       'After' => [
-        'mysql.service',
-        'network-online.target',
-        'time-sync.target'
-      ],
+        'mysql.service'
+      ]
     },
     'Service' => {
       'Restart' => 'always',
       'RestartSec' => 5,
-      "ExecStart" => '/usr/sbin/kea-dhcp4 -c /etc/kea/kea-dhcp4.conf'
-    },
-    'Install' => {
-      'WantedBy' => 'multi-user.target'
     }
   })
   action [:create]
