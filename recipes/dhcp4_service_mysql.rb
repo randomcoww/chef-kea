@@ -12,6 +12,7 @@ systemd_resource_dropin "10-mysql.conf" do
     }
   })
   action [:create]
+  notifies :restart, "service[kea-dhcp4-server]", :delayed
 end
 
 service 'kea-dhcp4-server' do
