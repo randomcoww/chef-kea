@@ -9,7 +9,7 @@ class ChefKea
       allowed_actions :create
 
       property :timeout
-      property :opts, Hash
+      property :options, Hash
       property :url, String
       property :queries, Array, default: lazy { parse_source }
 

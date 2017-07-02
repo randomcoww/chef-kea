@@ -21,7 +21,7 @@ class ChefKea
       private
 
       def mysql_client
-        @mysql_client ||= MysqlHelper::Client.new(new_resource.timeout, new_resource.opts)
+        @mysql_client ||= MysqlHelper::Client.new(new_resource.timeout, new_resource.options)
       end
     end
   end
