@@ -1,7 +1,7 @@
 class ChefKea
   class Resource
     class MysqlSeed < Chef::Resource
-      require 'openuri'
+      require 'open-uri'
 
       resource_name :kea_mysql_seed
 
