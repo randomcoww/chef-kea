@@ -1,7 +1,7 @@
 class ChefKea
   class Provider
     class Config < Chef::Provider
-      include MysqlCluster
+      include MysqlHelper
 
       provides :kea_mysql_seed, os: "linux"
 
