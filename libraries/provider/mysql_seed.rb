@@ -12,13 +12,21 @@ class ChefKea
 
       def action_create
         converge_by("Seed MySQL for Kea: #{new_resource}") do
-          new_resource.queries.each do |e|
-            mysql_client.query(e, true)
-          end
+          run_provision
         end
       end
 
       private
+
+      def run_provision
+        new_resource.queries.each do |e|
+          begin
+            mysql_client.query(e, false)
+          rescue
+            return
+          end
+        end
+      end
 
       def mysql_client
         @mysql_client ||= MysqlHelper::Client.new(new_resource.timeout, new_resource.options)
