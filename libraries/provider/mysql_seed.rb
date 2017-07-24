@@ -11,25 +11,19 @@ class ChefKea
       end
 
       def action_create
-        converge_by("Seed MySQL for Kea: #{new_resource}") do
-          run_provision
-        end if !mysql_client.nil?
-      end
-
-      private
-
-      def run_provision
-        new_resource.queries.each do |e|
-          begin
-            mysql_client.query(e)
-          rescue Mysql2::Error
-            return
+        if !new_resource.client.nil?
+          converge_by("Seed MySQL for Kea: #{new_resource}") do
+            begin
+              new_resource.client.query(new_resource.queries)
+            rescue Mysql2::Error => e
+              if e.message =~ / already exists$/
+                Chef::Log.info(e.message)
+              else
+                raise e
+              end
+            end
           end
         end
-      end
-
-      def mysql_client
-        @mysql_client ||= MysqlHelper::Client.new(new_resource.options)
       end
     end
   end
