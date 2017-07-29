@@ -16,11 +16,7 @@ class ChefKea
             begin
               new_resource.client.query(new_resource.queries)
             rescue Mysql2::Error => e
-              if e.message =~ / already exists$/
-                Chef::Log.info(e.message)
-              else
-                raise e
-              end
+              Chef::Log.info(e.message)
             end
           end
         end
